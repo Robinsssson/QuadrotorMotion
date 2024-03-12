@@ -1,3 +1,6 @@
+# -*- coding:UTF-8 -*-
 import torch
 
-torch.lstm()
+
+print(torch.cuda.get_device_name(0))
+

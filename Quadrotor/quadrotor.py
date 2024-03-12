@@ -14,6 +14,7 @@ class quadrotor:
         self.d = d
         self.i_array = np.asarray(i_array, dtype=float)
         self.u_array = np.array([0, 0, 0, 0])
+        self.alpha_acceleration_array = np.array([0, 0, 0])
 
     def status(self, w1, w2, w3, w4) -> None:
         self.w_array = np.array([w1, w2, w3, w4])
@@ -28,4 +29,4 @@ class quadrotor:
             self.l * self.u_array[2] / self.i_array[1],
             self.u_array[3] / self.i_array[2]
         ])
-        return self.alpha_acceleration_array
+        return self.alpha_acceleration_array.copy()
