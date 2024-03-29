@@ -3,12 +3,15 @@ import matplotlib.pyplot as plt
 from Environment.Environment import Environment
 from Model.PSO.Pso import Pso
 
+
 class MyTest(Environment):
+
     def __init__(self, size: int):
         super(MyTest, self).__init__(size)
 
     def get_fitness(self, pos):
-        return (pos[0] - 12) ** 2 + (pos[1] - 9) ** 2
+        return (1 - pos[0])**2 + 100 * (pos[1] - pos[0]**2)**2
+
 
 def main():
     np.random.seed(10)
@@ -22,16 +25,18 @@ def main():
     model = Pso(n, 2, 0.5, 1000, 5, envi)
     # ax.scatter(model.pos[0], model.pos[1])
     ax1.scatter(model.pos[0], model.pos[1])
+    ax1.set_title("Iter: 0 times")
     model.outputs(100)
     ax2.scatter(model.pos[0], model.pos[1])
+    ax2.set_title("Iter: 100 times")
     model.outputs(100)
     ax3.scatter(model.pos[0], model.pos[1])
+    ax3.set_title("Iter: 200 times")
     model.outputs(100)
     ax4.scatter(model.pos[0], model.pos[1])
-    print(
-        f"{model.pos[0, model.global_best_index]}, \
-        {model.pos[1, model.global_best_index]}"
-    )
+    ax4.set_title("Iter: 300 times")
+    print(f"{model.pos[0, model.global_best_index]}, \
+        {model.pos[1, model.global_best_index]}")
     print(model.global_best_fitness)
     # Plot some data on the axes.
     plt.show()
