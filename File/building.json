@@ -1,0 +1,24 @@
+{
+    "building":[
+        {
+            "label": 1,
+            "pos":[1, 2, 3],
+            "size":  [0, 0, 10, 10],
+            "angle": 0, 
+            "height": 24,
+            "attribute":{
+
+            }
+        },
+        {
+            "label": 1,
+            "pos":[1, 2, 3],
+            "size":  [0, 0, 0, 0],
+            "angle": 90, 
+            "height": 24,
+            "attribute":{
+                
+            }
+        }
+    ]
+}

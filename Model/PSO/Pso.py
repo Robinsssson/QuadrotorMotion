@@ -12,24 +12,24 @@ class Pso:
         self.max_vel = max_vel
         self.w = w
         self.c1 = self.c2 = 2
-        self.fitness = environment.get_fitness(self.pos)                        
-        self.private_best_fitness = environment.get_fitness(self.pos)                   #private_best_fitness[n] = function(pos)
+        self.fitness = environment.get_fitness(self.pos)                                #get fitness[n]
+        self.private_best_fitness = self.fitness.copy()                                 #private_best_fitness[n] = function(pos)
         self.private_best_pos = self.pos.copy()                                         #default make private_best_pos[d, n] = pos[d, n]
         self.global_best_index = np.argmin([self.private_best_fitness])                 #self.global_best_index = index of min private_best_fitness
         self.global_best_fitness = self.private_best_fitness[self.global_best_index]    #self.global_best_fitness = min of private_best_fitness
     
     def update_fitness(self):
-        self.fitness = self.environment.get_fitness(self.pos)                           
-        for i in range(self.number):
-            if self.fitness[i] < self.private_best_fitness[i]:
+        self.fitness = self.environment.get_fitness(self.pos)                           #fresh fitness by pos[d, n]
+        for i in range(self.number):   # select best min in fitness[n] if fitness less private_best_fitness[n]
+            if self.fitness[i] < self.private_best_fitness[i]:                          
                 self.private_best_fitness[i] = self.fitness[i]
                 for j in range(self.dimension):
                     self.private_best_pos[j, i] = self.pos[j, i]
-        self.global_best_index = np.argmin([self.private_best_fitness])
-        self.global_best_fitness = self.private_best_fitness[self.global_best_index]
+        self.global_best_index = np.argmin([self.private_best_fitness])                 #select best fitness in private_best_fitness
+        self.global_best_fitness = self.private_best_fitness[self.global_best_index]    
         
     def update_vel(self):
-        self.global_best_pos = np.array([self.pos[i, self.global_best_index] for i in range(self.dimension)]).reshape(self.dimension, 1)
+        self.global_best_pos = self.pos[:, self.global_best_index].copy().reshape(self.dimension, 1) #create
         self.v = self.w * self.v + self.c1 * random.random() * (self.private_best_pos - self.pos) + self.c2 * random.random() * (self.global_best_pos - self.pos)
         for vi in self.v:
             for v in vi:
