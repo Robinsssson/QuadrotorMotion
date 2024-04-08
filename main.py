@@ -32,7 +32,7 @@ def main():
     model.outputs(100)
     ax3.scatter(model.pos[0], model.pos[1])
     ax3.set_title("Iter: 200 times")
-    model.outputs(500)
+    model.outputs(200)
     ax4.scatter(model.pos[0], model.pos[1])
     ax4.set_title("Iter: 300 times")
     print(f"{model.pos[:, model.global_best_index]}")
@@ -41,6 +41,6 @@ def main():
     plt.savefig("PSO.png")
     plt.show()
 
-
 if __name__ == "__main__":
     main()
+    
