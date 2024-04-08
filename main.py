@@ -32,13 +32,14 @@ def main():
     model.outputs(100)
     ax3.scatter(model.pos[0], model.pos[1])
     ax3.set_title("Iter: 200 times")
-    model.outputs(100)
+    model.outputs(200)
     ax4.scatter(model.pos[0], model.pos[1])
     ax4.set_title("Iter: 300 times")
     print(f"{model.pos[0, model.global_best_index]}, \
         {model.pos[1, model.global_best_index]}")
     print(model.global_best_fitness)
     # Plot some data on the axes.
+    plt.savefig("PSO.png")
     plt.show()
 
 if __name__ == "__main__":
