@@ -1,6 +1,6 @@
 # -*- coding:UTF-8 -*-
 import torch
+import numpy as np
 
-
-print(torch.cuda.get_device_name(0))
-
+a = np.array([[1, 2, 3], [4, 5, 6]])
+print(np.dot(2, a))

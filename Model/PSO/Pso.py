@@ -30,7 +30,7 @@ class Pso:
         
     def update_vel(self):
         self.global_best_pos = np.array([self.pos[i, self.global_best_index] for i in range(self.dimension)]).reshape(self.dimension, 1)
-        self.v = self.w * self.v + self.c1 * random.random() * (self.private_best_pos - self.pos) + self.c2 * random.random() * (self.global_best_pos - self.pos)
+        self.v = self.w * self.v + self.c1   * random.random() * (self.private_best_pos - self.pos) + self.c2 * random.random() * (self.global_best_pos - self.pos)
         for vi in self.v:
             for v in vi:
                 if v >= self.max_vel:
