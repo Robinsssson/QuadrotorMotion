@@ -109,4 +109,3 @@ if __name__ == '__main__':
     model, length = train(test_set, 500, LENGTH)
     perplt = perdict(model,test, per, tmean, tmax, tmin, length)
     mt_plot(test, perplt)
->>>>>>> dev
