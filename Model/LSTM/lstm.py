@@ -4,26 +4,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-device = torch.device('cuda:0')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 class Lstm(nn.Module):
-    def __init__(self, hidden_size):
+    def __init__(self, hidden_size, number_layer=1):
         super().__init__()
         self.hidden_size = hidden_size
-        self.lstm = nn.LSTM(1, hidden_size, 2)
-        self.l = nn.Linear(hidden_size, hidden_size)
+        self.number_layer = number_layer
+        self.lstm = nn.LSTM(1, hidden_size, number_layer)
         self.fc = nn.Linear(hidden_size, 1)
-        h0 = torch.randn(2, 1, self.hidden_size).to(device)
-        c0 = torch.randn(2, 1, self.hidden_size).to(device)
-        self.hidden = (h0, c0)
         
     def forward(self, input, hidden=None):
-        if hidden is None:
-            h0 = torch.randn(2, 1, self.hidden_size).to(device)
-            c0 = torch.randn(2, 1, self.hidden_size).to(device)
-            hidden = (h0, c0)
         out, self.hidden = self.lstm(input.view(len(input) ,1, -1), hidden)
         out = out.view(-1, self.hidden_size)
-        out = self.l(out)
         out = self.fc(out)
         return out
 
@@ -46,14 +38,15 @@ def create_test(test_set, len):
     return lst
 
 def train(test_set, times, length):    
-    model = Lstm(64)
+    model = Lstm(30, 8)
     loss_function = nn.MSELoss()
     loss_function.to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.002)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     test_set = torch.FloatTensor(test_set)
     model.train()
     model = model.to(device)
     single_loss = None
+    min_loss = 100.
     for i in range(times):
         for test_s, label_s in create_test(test_set, length):
             test_s = test_s.to(device)
@@ -61,14 +54,14 @@ def train(test_set, times, length):
             optimizer.zero_grad()
             out = model(test_s)
             out = out.to(device)
-            single_loss = torch.sqrt(loss_function(out.view(-1), label_s.view(-1)))
+            single_loss = loss_function(out.view(-1), label_s.view(-1))
             single_loss.backward()
             optimizer.step()
-        
+            if min_loss > single_loss.item():
+                min_loss = single_loss.item()
+                torch.save(model.state_dict(), 'model.pth')
         if i%25 == 1:
-            print(f'epoch: {i:3} loss: {single_loss.item():10.10f}')
-        if single_loss.item() < 1e-3:
-            break
+            print(f'epoch: {i:3} loss: {single_loss.item():10.10f} minloss = {min_loss:10.10f}')
             
     print(f'epoch: {i:3} loss: {single_loss.item():10.10f}')
     return model, length
@@ -88,7 +81,7 @@ def perdict(model,test, per, tmean, tmax, tmin, length):
             out = out.to(device)
             per.append(out[-1].item())
             out = out * (tmax - tmin) + tmean
-            single_loss = torch.sqrt(loss_function(out.view(-1), test[401-length+i:401+i].view(-1)))
+            single_loss = loss_function(out.view(-1), test[401-length+i:401+i].view(-1))
             print(f'perdict: {i:3} loss: {single_loss.item():10.10f}')
     per_plt = np.array(per[-100:])
     per_plt = per_plt * (tmax - tmin) + tmean
@@ -104,8 +97,9 @@ def mt_plot(test, per_plt):
     plt.show()
     
 if __name__ == '__main__':
-    LENGTH = 20
+    LENGTH = 50
     test, test_set,per, (tmean, tmax, tmin) = per_train()
-    model, length = train(test_set, 500, LENGTH)
+    model, length = train(test_set, 1000, LENGTH)
+    model.load_state_dict(torch.load('model.pth'))
     perplt = perdict(model,test, per, tmean, tmax, tmin, length)
     mt_plot(test, perplt)
