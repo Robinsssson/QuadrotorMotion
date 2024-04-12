@@ -38,10 +38,10 @@ def create_test(test_set, len):
     return lst
 
 def train(test_set, times, length):    
-    model = Lstm(30, 8)
+    model = Lstm(16, 4)
     loss_function = nn.MSELoss()
     loss_function.to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.1)
     test_set = torch.FloatTensor(test_set)
     model.train()
     model = model.to(device)
@@ -97,9 +97,9 @@ def mt_plot(test, per_plt):
     plt.show()
     
 if __name__ == '__main__':
-    LENGTH = 50
+    LENGTH = 80
     test, test_set,per, (tmean, tmax, tmin) = per_train()
-    model, length = train(test_set, 1000, LENGTH)
+    model, length = train(test_set, 300, LENGTH)
     model.load_state_dict(torch.load('model.pth'))
     perplt = perdict(model,test, per, tmean, tmax, tmin, length)
     mt_plot(test, perplt)
