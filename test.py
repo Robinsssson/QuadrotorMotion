@@ -115,7 +115,7 @@ class MyTest(Environment):
     def get_fitness(self, pso: Pso):
         pos = pso.pos
         self.pos = pos
-        fit = self._f_angle1(10, np.pi/4) + self._f_angle2(10, np.pi/4) + self._f_step(self.step) + self._f_height(10, 10) + 10*self.f_close(self.final_pos)
+        fit = 2 * self._f_angle1(10, np.pi/4) + 2 * self._f_angle2(10, np.pi/4) +3 * self._f_step(self.step) +4 * self._f_height(10, 10) + 5 * self.f_close(self.final_pos)
         return fit
     
     def from_pos_getfit(self, pos):
