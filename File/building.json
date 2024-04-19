@@ -2,20 +2,20 @@
     "building":[
         {
             "label": 1,
-            "pos":[1, 2, 3],
-            "size":  [0, 0, 10, 10],
+            "pos":[80, 60],
+            "size":  [10, 10],
             "angle": 0, 
-            "height": 24,
+            "height": 10,
             "attribute":{
 
             }
         },
         {
             "label": 2,
-            "pos":[1, 2, 3],
-            "size":  [0, 0, 0, 0],
-            "angle": 90, 
-            "height": 24,
+            "pos":[60, 50],
+            "size":  [10, 10],
+            "angle": 0, 
+            "height": 30,
             "attribute":{
                 
             }

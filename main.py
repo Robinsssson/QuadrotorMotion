@@ -2,45 +2,37 @@ import numpy as np
 import matplotlib.pyplot as plt
 from Environment.Environment import Environment
 from Model.PSO.Pso import Pso
+from matplotlib import cm
+from scipy.interpolate import griddata
 
 
 class MyTest(Environment):
 
-    def __init__(self, size: int):
+    def __init__(self, size: tuple, number=100):
         super(MyTest, self).__init__(size)
+        self.size = size
+
+    def z(self, point: tuple = None, number=1000):
+        if point is None:
+            point = (50, 50)
+        px, py = point
+        points = np.random.rand(number, 2) * self.size[0]
+        hi = 30 + 40 * np.random.rand(number)
+        return points, hi * np.exp(-((points[:, 0] - px) / 20)**2 -
+                                   ((points[:, 1] - py) / 20)**2)
 
     def get_fitness(self, pos):
-        return (1 - pos[0])**2 + 100 * (pos[1] - pos[0]**2)**2
+        # return (1 - pos[0])**2 + 100 * (pos[1] - pos[0]**2)**2
+        return self.z(pos[0], pos[1])
 
-
-def main():
-    np.random.seed(10)
-    fig = plt.figure(figsize=(24, 10))
-    ax1 = fig.add_subplot(141)
-    ax2 = fig.add_subplot(142)
-    ax3 = fig.add_subplot(143)
-    ax4 = fig.add_subplot(144)
-    envi = MyTest(0)
-    n = 5000
-    model = Pso(n, 2, 0.5, 1000, 5, envi)
-    # ax.scatter(model.pos[0], model.pos[1])
-    ax1.scatter(model.pos[0], model.pos[1])
-    ax1.set_title("Iter: 0 times")
-    model.outputs(100)
-    ax2.scatter(model.pos[0], model.pos[1])
-    ax2.set_title("Iter: 100 times")
-    model.outputs(100)
-    ax3.scatter(model.pos[0], model.pos[1])
-    ax3.set_title("Iter: 200 times")
-    model.outputs(200)
-    ax4.scatter(model.pos[0], model.pos[1])
-    ax4.set_title("Iter: 300 times")
-    print(f"{model.pos[:, model.global_best_index]}")
-    print(model.global_best_fitness)
-    # Plot some data on the axes.
-    plt.savefig("PSO.png")
-    plt.show()
 
 if __name__ == "__main__":
-    main()
-    
+    # main()
+    fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+    envi = MyTest((100, 100), 1000)
+    points, z = envi.z((50, 50), 100)
+    x, y = np.mgrid[0:100:1000j, 0:100:1000j]
+    z = griddata(points, z, (x, y), method='cubic')
+    print(z.shape)
+    ax.plot_surface(x, y, z, cmap=cm.coolwarm)
+    plt.show()
