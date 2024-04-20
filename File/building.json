@@ -6,16 +6,20 @@
             "size":  [10, 10],
             "angle": 0, 
             "height": 10,
+            "weight":0.9,
+            "distance": 10,
             "attribute":{
 
             }
         },
         {
             "label": 2,
-            "pos":[60, 50],
+            "pos":[20, 60],
             "size":  [10, 10],
             "angle": 0, 
-            "height": 30,
+            "height": 10,
+            "weight":0.2,
+            "distance": 10,
             "attribute":{
                 
             }

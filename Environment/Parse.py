@@ -11,9 +11,13 @@ class SingleBuilding:
         self.angle = build_dict["angle"]
         self.height = build_dict["height"]
         self.attribute = build_dict["attribute"]
+        self.local_h = None
+        self.weight = build_dict["weight"]
+        self.serached = False
+        self.distance = build_dict["distance"]
         
     def __str__(self) -> str:
-        return f"label: {self.label}, pos: {self.pos}, size: {self.size}, angle: {self.angle}, height: {self.height}, attribute: {self.attribute}"
+        return f'label: {self.label}, pos: {self.pos}, size: {self.size}, angle: {self.angle}, height: {self.height}, attribute: {self.attribute}, weight: {self.weight}, distance: {self.distance}, local_h: {self.local_h}, serached: {self.serached}'
         
         
 class BuildingParser:
